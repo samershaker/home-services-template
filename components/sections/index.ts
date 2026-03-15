@@ -4,3 +4,8 @@ export { ServiceCard } from './ServiceCard';
 export { EmergencyBanner } from './EmergencyBanner';
 export { ContactSection } from './ContactSection';
 export { LocationGrid } from './LocationGrid';
+export { CTABanner } from './CTABanner';
+export { TrustSection } from './TrustSection';
+export { ServicesCarousel } from './ServicesCarousel';
+export { ReviewsWidget } from './ReviewsWidget';
+export { FAQSection } from './FAQSection';

@@ -201,6 +201,30 @@ const config: SiteConfig = {
     },
   ],
 
+  // ─── FAQs ─────────────────────────────────────────────
+  faqs: [
+    {
+      question: 'How quickly can you respond to emergencies?',
+      answer: 'We offer same-day emergency service for urgent issues. Our team is available 24/7 for critical situations — call us anytime and we\'ll dispatch a technician as fast as possible.',
+    },
+    {
+      question: 'Are you licensed and insured?',
+      answer: 'Yes, we are fully licensed and insured. All of our technicians carry the proper certifications and our company maintains comprehensive liability and workers\' compensation insurance for your protection.',
+    },
+    {
+      question: 'Do you offer free estimates?',
+      answer: 'Yes, we provide free estimates for most services. We\'ll assess your situation, explain the options, and give you a transparent, written quote before any work begins — no surprises.',
+    },
+    {
+      question: 'What areas do you serve?',
+      answer: 'We serve the greater metro area including San Diego, La Jolla, El Cajon, and surrounding communities. If you\'re not sure whether we cover your area, give us a call and we\'ll let you know.',
+    },
+    {
+      question: 'Do you offer financing?',
+      answer: 'Yes, we offer flexible financing options for larger projects and installations. We work with multiple lenders to find a plan that fits your budget — ask us about current promotions.',
+    },
+  ],
+
   // ─── Feature Flags ──────────────────────────────────
   features: {
     heroVideo: false,         // Show ambient video in hero (needs /videos/hero-ambient.mp4)

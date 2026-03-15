@@ -144,6 +144,7 @@ export interface SiteConfig {
   features: Features;
   trustStats?: TrustStat[];
   reviews?: Review[];
+  faqs?: FAQ[];
 }
 
 // ─── Page Generation ──────────────────────────────────
@@ -158,6 +159,13 @@ export interface SitemapEntry {
 export interface PageParams {
   service?: string;
   location?: string;
+}
+
+// ─── FAQ ──────────────────────────────────────────────
+
+export interface FAQ {
+  question: string;
+  answer: string;
 }
 
 // ─── Reviews ──────────────────────────────────────────

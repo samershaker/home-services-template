@@ -4,7 +4,7 @@
  */
 
 import siteConfig from '../site.config';
-import type { SiteConfig, Service, Location, Business, Theme, SEOConfig, Features, TrustStat, Review } from './types';
+import type { SiteConfig, Service, Location, Business, Theme, SEOConfig, Features, TrustStat, Review, FAQ } from './types';
 
 // ─── Validated Config Export ──────────────────────────
 
@@ -17,6 +17,7 @@ export const seo: SEOConfig = config.seo;
 export const features: Features = config.features;
 export const trustStats: TrustStat[] = config.trustStats ?? [];
 export const reviews: Review[] = config.reviews ?? [];
+export const faqs: FAQ[] = config.faqs ?? [];
 
 // ─── Lookup Helpers ───────────────────────────────────
 

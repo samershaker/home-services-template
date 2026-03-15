@@ -1,139 +1,180 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { HeroReveal } from '@/components/cinematic/HeroReveal';
-import { ScrollReveal } from '@/components/cinematic/ScrollReveal';
 import { ParallaxImage } from '@/components/cinematic/ParallaxImage';
-import {
-  ServiceGrid,
-  ServicesCarousel,
-  TrustSection,
-  ReviewsWidget,
-  CTABanner,
-  LocationGrid,
-  ContactSection,
-  EmergencyBanner,
-} from '@/components/sections';
+import { ScrollReveal } from '@/components/cinematic/ScrollReveal';
+import { TrustSection } from '@/components/sections/TrustSection';
+import { ServiceGrid } from '@/components/sections/ServiceGrid';
+import { CTABanner } from '@/components/sections/CTABanner';
+import { LocationGrid } from '@/components/sections/LocationGrid';
+import { EmergencyBanner } from '@/components/sections/EmergencyBanner';
+import { FAQSection } from '@/components/sections/FAQSection';
+import { ContactSection } from '@/components/sections/ContactSection';
 import { business, features, contact } from '@/lib/config';
 
-/**
- * Homepage — Cinematic, config-driven, section-composable.
- *
- * Every section checks its feature flag. Disable in site.config.ts
- * and the section vanishes — no code changes needed.
- */
+// Lazy-load below-fold heavy components
+const ServicesCarousel = dynamic(
+  () => import('@/components/sections/ServicesCarousel').then((mod) => mod.ServicesCarousel),
+  { ssr: true }
+);
+const ReviewsWidget = dynamic(
+  () => import('@/components/sections/ReviewsWidget').then((mod) => mod.ReviewsWidget),
+  { ssr: true }
+);
+
+/* ═══════════════════════════════════════════════════════
+   HOME PAGE — Cinematic, scroll-driven experience.
+   12 sections with parallax breaks, staggered reveals,
+   and feature-flag gating for optional modules.
+   ═══════════════════════════════════════════════════════ */
+
 export default function HomePage() {
   return (
     <>
-      {/* ═══ Hero: Full-viewport cinematic reveal ═══ */}
+      {/* ═══════════════════════════════════════════
+          1. HERO — Full viewport cinematic reveal
+          ═══════════════════════════════════════════ */}
       <HeroReveal
-        ctaPrimary={{ label: `Call ${contact.phone}`, href: contact.phoneHref }}
-        ctaSecondary={{ label: 'Our Services', href: '#services' }}
+        tagline={`${business.address.city}'s Trusted Home Service Professionals`}
+        title={business.name}
+        subtitle={business.description}
+        ctaPrimary={{
+          label: `📞 Call Now: ${contact.phone}`,
+          href: contact.phoneHref,
+        }}
+        ctaSecondary={{
+          label: 'View Our Services →',
+          href: '#services',
+        }}
       />
 
-      {/* ═══ Trust Signals: Stats that build credibility ═══ */}
-      <section className="section-padding">
-        <TrustSection />
-      </section>
+      {/* ═══════════════════════════════════════════
+          2. TRUST SIGNALS — Stats strip below hero
+          ═══════════════════════════════════════════ */}
+      <div className="relative z-10 -mt-20">
+        <TrustSection
+          className="bg-gradient-to-b from-transparent to-background/50"
+        />
+      </div>
 
-      {/* ═══ Services Carousel: Visual, swipeable ═══ */}
+      {/* ═══════════════════════════════════════════
+          3. SERVICES CAROUSEL — Auto-scrolling showcase
+          (feature-flagged: servicesCarousel)
+          ═══════════════════════════════════════════ */}
       {features.servicesCarousel && (
-        <section className="py-16 md:py-24 overflow-hidden">
-          <ScrollReveal>
-            <div className="max-w-7xl mx-auto px-6 mb-12">
-              <p className="text-sm font-medium text-brand-accent uppercase tracking-wider mb-3">
-                What We Do
-              </p>
-              <h2 className="text-3xl md:text-4xl font-bold">Our Services</h2>
-            </div>
-            <ServicesCarousel />
-          </ScrollReveal>
-        </section>
+        <ScrollReveal direction="up" className="section-padding">
+          <ServicesCarousel />
+        </ScrollReveal>
       )}
 
-      {/* ═══ Services Grid: Detailed cards ═══ */}
-      <section id="services" className="section-padding">
-        <ScrollReveal>
+      {/* ═══════════════════════════════════════════
+          4. PARALLAX BREAK — Atmospheric divider
+          ═══════════════════════════════════════════ */}
+      {features.parallaxImages && (
+        <div className="py-4 px-6">
+          <div className="max-w-7xl mx-auto rounded-2xl overflow-hidden">
+            <ParallaxImage
+              src="/images/generated/parallax-tools.jpg"
+              alt="Professional equipment and tools"
+              intensity="medium"
+              overlay="bottom"
+              blurOnScroll
+              className="h-[40vh] md:h-[50vh]"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* ═══════════════════════════════════════════
+          5. SERVICE GRID — Full cards grid
+          ═══════════════════════════════════════════ */}
+      <section id="services" className="section-padding bg-gradient-to-b from-transparent via-surface/30 to-transparent">
+        <ScrollReveal direction="up">
           <ServiceGrid
-            title={features.servicesCarousel ? undefined : 'Our Services'}
-            subtitle={
-              features.servicesCarousel
-                ? undefined
-                : `Professional solutions from ${business.name}`
-            }
-            columns={3}
+            title="Our Services"
+            subtitle={`Professional solutions from ${business.name} — quality workmanship, every time.`}
           />
         </ScrollReveal>
       </section>
 
-      {/* ═══ Parallax Break ═══ */}
-      {features.parallaxImages && (
-        <ParallaxImage
-          src="/images/generated/parallax-tools.jpg"
-          alt="Professional equipment"
-          intensity="medium"
-          overlay="bottom"
-          className="h-[50vh]"
-        />
-      )}
-
-      {/* ═══ CTA Banner ═══ */}
+      {/* ═══════════════════════════════════════════
+          6. CTA BANNER — "Call us today" divider
+          ═══════════════════════════════════════════ */}
       <CTABanner
         title="Ready to Get Started?"
-        subtitle={`${business.name} is here to help. Same-day service available.`}
-        variant="gradient"
+        subtitle={`${business.name} is here for you — from routine maintenance to urgent repairs. No hidden fees. Satisfaction guaranteed.`}
+        ctaText={`📞 Call Now: ${contact.phone}`}
+        ctaHref={contact.phoneHref}
+        secondaryText="Request Free Estimate"
+        secondaryHref="#contact"
+        variant="glass"
       />
 
-      {/* ═══ Reviews ═══ */}
-      {features.googleReviews && (
-        <section className="section-padding">
-          <ScrollReveal>
-            <ReviewsWidget />
-          </ScrollReveal>
-        </section>
-      )}
-
-      {/* ═══ Locations ═══ */}
+      {/* ═══════════════════════════════════════════
+          7. LOCATIONS — Service areas grid
+          (feature-flagged: locationPages)
+          ═══════════════════════════════════════════ */}
       {features.locationPages && (
-        <section id="areas" className="section-padding">
-          <ScrollReveal>
-            <div className="max-w-7xl mx-auto px-6 mb-12">
-              <p className="text-sm font-medium text-brand-accent uppercase tracking-wider mb-3">
-                Service Areas
-              </p>
-              <h2 className="text-3xl md:text-4xl font-bold">
-                Areas We Serve
-              </h2>
-            </div>
-            <LocationGrid />
+        <section className="section-padding bg-gradient-to-b from-transparent via-brand-primary/[0.03] to-transparent">
+          <ScrollReveal direction="up">
+            <LocationGrid
+              title="Areas We Serve"
+              subtitle={`${business.name} proudly serves these communities and surrounding areas.`}
+            />
           </ScrollReveal>
         </section>
       )}
 
-      {/* ═══ Second Parallax Break ═══ */}
-      {features.parallaxImages && (
-        <ParallaxImage
-          src="/images/generated/parallax-duct.jpg"
-          alt="Service in progress"
-          intensity="subtle"
-          overlay="full"
-          className="h-[40vh]"
-        />
+      {/* ═══════════════════════════════════════════
+          8. REVIEWS — Google reviews widget
+          (feature-flagged: googleReviews)
+          ═══════════════════════════════════════════ */}
+      {features.googleReviews && (
+        <ScrollReveal direction="up" className="section-padding">
+          <ReviewsWidget />
+        </ScrollReveal>
       )}
 
-      {/* ═══ Contact ═══ */}
-      <section id="contact" className="section-padding">
-        <ScrollReveal>
-          <div className="max-w-7xl mx-auto px-6 mb-12">
-            <p className="text-sm font-medium text-brand-accent uppercase tracking-wider mb-3">
-              Get In Touch
-            </p>
-            <h2 className="text-3xl md:text-4xl font-bold">Contact Us</h2>
+      {/* ═══════════════════════════════════════════
+          9. PARALLAX BREAK 2 — Second atmospheric divider
+          ═══════════════════════════════════════════ */}
+      {features.parallaxImages && (
+        <div className="py-4 px-6">
+          <div className="max-w-7xl mx-auto rounded-2xl overflow-hidden">
+            <ParallaxImage
+              src="/images/generated/parallax-work.jpg"
+              alt={`${business.name} professionals at work`}
+              intensity="subtle"
+              overlay="full"
+              caption={`Serving ${business.address.city} since ${business.founded ?? 'day one'}`}
+              className="h-[35vh] md:h-[45vh]"
+            />
           </div>
+        </div>
+      )}
+
+      {/* ═══════════════════════════════════════════
+          10. FAQ — Common questions accordion
+          ═══════════════════════════════════════════ */}
+      <section className="section-padding bg-gradient-to-b from-transparent via-surface/20 to-transparent">
+        <ScrollReveal direction="up">
+          <FAQSection />
+        </ScrollReveal>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          11. CONTACT — Form + business info
+          ═══════════════════════════════════════════ */}
+      <section id="contact" className="section-padding">
+        <ScrollReveal direction="up">
           <ContactSection />
         </ScrollReveal>
       </section>
 
-      {/* ═══ Emergency Banner (fixed, bottom) ═══ */}
+      {/* ═══════════════════════════════════════════
+          12. EMERGENCY BANNER — Fixed bottom CTA
+          ═══════════════════════════════════════════ */}
       <EmergencyBanner />
     </>
   );
