@@ -46,7 +46,7 @@ export function Footer() {
               {services.slice(0, 6).map((service) => (
                 <li key={service.id}>
                   <Link
-                    href={`/services/${service.slug}`}
+                    href={`/en/services/${service.slug}`}
                     className="text-sm text-muted hover:text-brand-primary transition-colors"
                   >
                     {service.shortName}
@@ -65,7 +65,7 @@ export function Footer() {
               {locations.slice(0, 6).map((location) => (
                 <li key={location.slug}>
                   <Link
-                    href={`/locations/${location.slug}`}
+                    href={`/en/locations/${location.slug}`}
                     className="text-sm text-muted hover:text-brand-primary transition-colors"
                   >
                     {location.name}

@@ -19,6 +19,8 @@ import type { Metadata } from 'next';
 
 // ─── Static Generation ────────────────────────────────
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return generateLocationParams();
 }

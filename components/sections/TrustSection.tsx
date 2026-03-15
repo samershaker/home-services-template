@@ -1,200 +1,186 @@
 'use client';
 
-import { useRef, useEffect, useState } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { Shield, Clock, DollarSign, Award, BadgeCheck, Star, Users, Wrench } from 'lucide-react';
 import { business } from '@/lib/config';
-import { fadeUp, stagger, ease } from '@/lib/animations';
+import { stagger, fadeUp, ease } from '@/lib/animations';
+import { GlassmorphicCard } from '@/components/cinematic/GlassmorphicCard';
+import { ScrollReveal } from '@/components/cinematic/ScrollReveal';
 
-/* ═══════════════════════════════════════════
-   TRUST SECTION — "Why Choose Us" with animated
-   stats, glass cards, and optional certifications.
-   ═══════════════════════════════════════════ */
-
-export interface TrustStat {
-  value: number;
-  suffix?: string;
-  prefix?: string;
-  label: string;
-  icon?: string;
-}
+/* ═══════════════════════════════════════════════════════
+   TRUST SECTION — Social proof & credibility signals
+   Business founding year, license, trust badges, certifications
+   All data from config — no hardcoded business info
+   ═══════════════════════════════════════════════════════ */
 
 interface TrustSectionProps {
-  title?: string;
-  subtitle?: string;
-  stats?: TrustStat[];
-  showLicense?: boolean;
   className?: string;
+  customerCount?: string;
+  certifications?: string[];
 }
 
-// ─── Default Stats ────────────────────────────────────
-
-const defaultStats: TrustStat[] = [
-  { value: 15, suffix: '+', label: 'Years Experience', icon: '🏆' },
-  { value: 500, suffix: '+', label: 'Jobs Completed', icon: '✅' },
-  { value: 5, label: 'Star Rated', icon: '⭐' },
-  { value: 100, suffix: '%', label: 'Licensed & Insured', icon: '🛡️' },
+const trustSignals = [
+  {
+    icon: Shield,
+    title: 'Licensed & Insured',
+    description: 'Fully licensed and insured for your protection. Every job backed by comprehensive coverage.',
+    color: 'text-emerald-400',
+    bgColor: 'bg-emerald-400/10',
+  },
+  {
+    icon: Clock,
+    title: 'Same-Day Service',
+    description: 'Emergency? We respond fast. Same-day service available for urgent repairs and critical issues.',
+    color: 'text-blue-400',
+    bgColor: 'bg-blue-400/10',
+  },
+  {
+    icon: DollarSign,
+    title: 'Upfront Pricing',
+    description: 'No hidden fees, no surprises. You get a written quote before any work begins. Period.',
+    color: 'text-brand-accent',
+    bgColor: 'bg-brand-accent/10',
+  },
+  {
+    icon: Award,
+    title: 'Warranty Guaranteed',
+    description: 'Every job comes with a written warranty. We stand behind our work — if it\'s not right, we fix it.',
+    color: 'text-purple-400',
+    bgColor: 'bg-purple-400/10',
+  },
 ];
 
-// ─── Animated Counter ─────────────────────────────────
-
-function AnimatedCounter({
-  value,
-  suffix = '',
-  prefix = '',
-  duration = 2,
-}: {
-  value: number;
-  suffix?: string;
-  prefix?: string;
-  duration?: number;
-}) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-50px' });
-  const [displayed, setDisplayed] = useState(0);
-
-  useEffect(() => {
-    if (!isInView) return;
-
-    let startTime: number | null = null;
-    let animFrame: number;
-
-    const animate = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / (duration * 1000), 1);
-      // Ease out cubic
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setDisplayed(Math.round(eased * value));
-
-      if (progress < 1) {
-        animFrame = requestAnimationFrame(animate);
-      }
-    };
-
-    animFrame = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animFrame);
-  }, [isInView, value, duration]);
-
-  return (
-    <span ref={ref}>
-      {prefix}{displayed}{suffix}
-    </span>
-  );
-}
-
-// ─── Stat Card ────────────────────────────────────────
-
-function StatCard({ stat, index }: { stat: TrustStat; index: number }) {
-  return (
-    <motion.div
-      variants={fadeUp}
-      className="group relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-8 text-center transition-all duration-300 hover:border-white/20 hover:bg-white/[0.08] hover:shadow-xl hover:-translate-y-1"
-    >
-      {/* Glow on hover */}
-      <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-b from-brand-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm" />
-
-      <div className="relative z-10">
-        {/* Icon */}
-        {stat.icon && (
-          <div className="text-3xl mb-4">{stat.icon}</div>
-        )}
-
-        {/* Animated number */}
-        <div className="font-heading text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-2">
-          <AnimatedCounter
-            value={stat.value}
-            suffix={stat.suffix}
-            prefix={stat.prefix}
-          />
-        </div>
-
-        {/* Label */}
-        <p className="text-sm font-medium uppercase tracking-widest text-muted">
-          {stat.label}
-        </p>
-      </div>
-
-      {/* Bottom accent */}
-      <div className="absolute bottom-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-brand-accent/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-    </motion.div>
-  );
-}
-
-// ─── Main Section ─────────────────────────────────────
-
 export function TrustSection({
-  title = 'Why Choose Us',
-  subtitle,
-  stats = defaultStats,
-  showLicense = true,
   className = '',
+  customerCount = '500+',
+  certifications,
 }: TrustSectionProps) {
-  const defaultSubtitle = `${business.name} delivers professional results backed by experience, certifications, and a commitment to quality.`;
+  const currentYear = new Date().getFullYear();
+  const yearsInBusiness = business.founded
+    ? currentYear - business.founded
+    : null;
 
   return (
     <section className={`py-24 md:py-32 px-6 ${className}`}>
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: ease.smooth as unknown as number[] }}
-          className="text-center mb-16"
-        >
-          <p className="text-xs font-mono uppercase tracking-[0.3em] text-brand-accent mb-4">
-            Trusted Professionals
+        {/* Section Header */}
+        <ScrollReveal direction="up" className="text-center mb-16">
+          <p className="text-xs font-mono uppercase tracking-[0.2em] text-brand-accent mb-4">
+            Why Choose Us
           </p>
-          <h2 className="font-heading text-3xl sm:text-4xl font-bold mb-6">
-            {title}
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-[var(--color-text)] mb-6 tracking-tight">
+            Trusted by{' '}
+            <span className="text-brand-accent">{customerCount} Customers</span>
           </h2>
-          <p className="text-lg text-muted max-w-2xl mx-auto leading-relaxed">
-            {subtitle ?? defaultSubtitle}
+          <p className="text-muted max-w-2xl mx-auto leading-relaxed">
+            {business.name} has been serving the community
+            {yearsInBusiness ? ` for ${yearsInBusiness}+ years` : ''} with
+            honest, reliable service. Here&apos;s what sets us apart.
           </p>
-        </motion.div>
+        </ScrollReveal>
 
-        {/* Stats Grid */}
+        {/* Stats Band */}
+        <ScrollReveal direction="up" delay={0.1} className="mb-16">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              {
+                icon: Users,
+                value: customerCount,
+                label: 'Happy Customers',
+              },
+              {
+                icon: Star,
+                value: yearsInBusiness ? `${yearsInBusiness}+` : '—',
+                label: 'Years Experience',
+              },
+              {
+                icon: BadgeCheck,
+                value: business.license ? '✓' : '—',
+                label: business.license || 'Licensed',
+              },
+              {
+                icon: Wrench,
+                value: '24/7',
+                label: 'Emergency Service',
+              },
+            ].map((stat, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1, ease: ease.smooth as unknown as number[] }}
+                className="text-center"
+              >
+                <GlassmorphicCard className="p-5 flex flex-col items-center gap-2">
+                  <stat.icon className="w-5 h-5 text-brand-accent mb-1" />
+                  <span className="text-2xl md:text-3xl font-bold text-[var(--color-text)] font-heading tracking-tight">
+                    {stat.value}
+                  </span>
+                  <span className="text-xs text-muted uppercase tracking-wider">
+                    {stat.label}
+                  </span>
+                </GlassmorphicCard>
+              </motion.div>
+            ))}
+          </div>
+        </ScrollReveal>
+
+        {/* Trust Signal Cards */}
         <motion.div
-          variants={stagger}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-60px' }}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
+          variants={stagger}
+          className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
         >
-          {stats.map((stat, i) => (
-            <StatCard key={i} stat={stat} index={i} />
+          {trustSignals.map((signal, i) => (
+            <motion.div key={i} variants={fadeUp}>
+              <GlassmorphicCard variant="interactive" className="p-6 h-full group">
+                {/* Icon */}
+                <div className={`w-12 h-12 rounded-brand ${signal.bgColor} flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110`}>
+                  <signal.icon className={`w-6 h-6 ${signal.color}`} />
+                </div>
+
+                {/* Content */}
+                <h3 className="font-heading text-lg font-bold text-[var(--color-text)] mb-2 tracking-tight">
+                  {signal.title}
+                </h3>
+                <p className="text-sm text-muted leading-relaxed">
+                  {signal.description}
+                </p>
+              </GlassmorphicCard>
+            </motion.div>
           ))}
         </motion.div>
 
-        {/* License / Certifications Bar */}
-        {showLicense && business.license && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-center"
-          >
-            <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl px-6 py-3">
-              <svg className="w-5 h-5 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-              <span className="text-sm font-medium text-white">{business.license}</span>
-              <span className="text-xs text-muted">• Licensed &amp; Insured</span>
+        {/* Certifications */}
+        {certifications && certifications.length > 0 && (
+          <ScrollReveal direction="up" delay={0.2} className="text-center">
+            <p className="text-xs font-mono uppercase tracking-[0.15em] text-muted mb-4">
+              Certifications & Affiliations
+            </p>
+            <div className="flex flex-wrap justify-center gap-3">
+              {certifications.map((cert, i) => (
+                <span
+                  key={i}
+                  className="px-4 py-2 rounded-brand border border-white/10 bg-white/5 backdrop-blur-md text-xs text-muted font-medium"
+                >
+                  {cert}
+                </span>
+              ))}
             </div>
-          </motion.div>
+          </ScrollReveal>
         )}
 
-        {/* Founded year */}
-        {business.founded && (
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="text-center text-sm text-muted mt-6"
-          >
-            Proudly serving our community since {business.founded}
-          </motion.p>
+        {/* License info */}
+        {business.license && (
+          <ScrollReveal direction="up" delay={0.3} className="text-center mt-8">
+            <div className="inline-flex items-center gap-2 text-xs text-muted">
+              <BadgeCheck className="w-4 h-4 text-brand-accent" />
+              <span>{business.license}</span>
+            </div>
+          </ScrollReveal>
         )}
       </div>
     </section>

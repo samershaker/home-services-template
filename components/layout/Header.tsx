@@ -7,10 +7,10 @@ import { business, contact } from '@/lib/config';
 import { fadeIn, slideInRight } from '@/lib/animations';
 
 const navLinks = [
-  { label: 'Home', href: '/' },
-  { label: 'Services', href: '/services' },
-  { label: 'Locations', href: '/locations' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Home', href: '/en' },
+  { label: 'Services', href: '/en#services' },
+  { label: 'Locations', href: '/en#areas' },
+  { label: 'Contact', href: '/en/contact' },
 ];
 
 export function Header() {
@@ -40,7 +40,7 @@ export function Header() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between md:h-20">
           {/* Logo / Business Name */}
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/en" className="flex items-center gap-2">
             <span className="text-xl font-heading font-bold text-brand-primary">
               {business.name}
             </span>
