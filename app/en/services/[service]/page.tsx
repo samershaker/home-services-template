@@ -10,6 +10,7 @@ import {
 } from '@/lib/config';
 import { serviceMetadata, JsonLd, serviceJsonLd, breadcrumbJsonLd } from '@/lib/seo';
 import { PageWrapper } from '@/components/layout/PageWrapper';
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { LocationGrid } from '@/components/sections/LocationGrid';
 
 export const dynamicParams = false;
@@ -40,6 +41,12 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
           { name: service.name, url: `/en/services/${service.slug}` },
         ])}
       />
+
+      <Breadcrumbs items={[
+        { label: 'Home', href: '/en' },
+        { label: 'Services', href: '/en#services' },
+        { label: service.name },
+      ]} />
 
       {/* Service Header */}
       <div className="text-center mb-16">

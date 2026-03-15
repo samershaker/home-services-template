@@ -81,7 +81,7 @@ export function Hero({
               <a href={contact.phoneHref}>📞 Call Now</a>
             </Button>
             <Button asChild variant="secondary" size="lg">
-              <Link href="/en/services">Our Services</Link>
+              <Link href="/en#services">Our Services</Link>
             </Button>
           </motion.div>
 

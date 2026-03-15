@@ -22,8 +22,9 @@ export default function RootLayout({
     <html lang="en" className={inter.variable}>
       <body>
         <ThemeProvider>
+          <a href="#main-content" className="skip-link">Skip to main content</a>
           <Header />
-          <main className="min-h-screen">{children}</main>
+          <main id="main-content" className="min-h-screen">{children}</main>
           <Footer />
         </ThemeProvider>
       </body>

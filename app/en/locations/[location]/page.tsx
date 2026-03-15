@@ -13,6 +13,7 @@ import {
   breadcrumbJsonLd,
 } from '@/lib/seo';
 import { PageWrapper } from '@/components/layout/PageWrapper';
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { ScrollReveal } from '@/components/cinematic/ScrollReveal';
 import { GlassmorphicCard } from '@/components/cinematic/GlassmorphicCard';
 import type { Metadata } from 'next';
@@ -57,6 +58,12 @@ export default async function LocationPage({
           { name: location.name, url: `/en/locations/${location.slug}` },
         ])}
       />
+
+      <Breadcrumbs items={[
+        { label: 'Home', href: '/en' },
+        { label: 'Locations', href: '/en#areas' },
+        { label: location.name },
+      ]} />
 
       {/* ── Header ──────────────────────────────── */}
       <section className="section-padding">

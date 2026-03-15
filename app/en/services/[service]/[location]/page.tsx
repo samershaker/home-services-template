@@ -14,6 +14,7 @@ import {
   breadcrumbJsonLd,
 } from '@/lib/seo';
 import { PageWrapper } from '@/components/layout/PageWrapper';
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { ScrollReveal } from '@/components/cinematic/ScrollReveal';
 import { GlassmorphicCard } from '@/components/cinematic/GlassmorphicCard';
 import type { Metadata } from 'next';
@@ -65,6 +66,12 @@ export default async function ServiceLocationPage({
           },
         ])}
       />
+
+      <Breadcrumbs items={[
+        { label: 'Home', href: '/en' },
+        { label: service.name, href: `/en/services/${service.slug}` },
+        { label: location.name },
+      ]} />
 
       {/* ── Header ──────────────────────────────── */}
       <section className="section-padding">
