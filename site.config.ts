@@ -1,4 +1,4 @@
-import { SiteConfig } from './lib/types';
+import type { SiteConfig } from './lib/types';
 
 /**
  * ============================================================
@@ -160,6 +160,46 @@ const config: SiteConfig = {
     ogImage: '/images/og-default.jpg',
     locale: 'en_US',
   },
+
+  // ─── Trust Signals / Stats ───────────────────────────
+  trustStats: [
+    { value: '10+', label: 'Years Experience', icon: 'award' },
+    { value: '500+', label: 'Jobs Completed', icon: 'check-circle' },
+    { value: '4.9★', label: 'Average Rating', icon: 'star' },
+    { value: '100%', label: 'Licensed & Insured', icon: 'shield' },
+  ],
+
+  // ─── Sample Reviews (replace with real ones) ────────
+  reviews: [
+    {
+      author: 'John D.',
+      rating: 5,
+      text: 'Excellent service! They were on time, professional, and fixed our issue quickly. Highly recommend.',
+      date: '2024-12-15',
+      source: 'google' as const,
+    },
+    {
+      author: 'Sarah M.',
+      rating: 5,
+      text: 'Best in the area. Fair pricing and they explained everything before starting the work.',
+      date: '2024-11-20',
+      source: 'google' as const,
+    },
+    {
+      author: 'Mike R.',
+      rating: 5,
+      text: 'Called for an emergency and they showed up within the hour. Lifesavers!',
+      date: '2024-10-08',
+      source: 'yelp' as const,
+    },
+    {
+      author: 'Lisa K.',
+      rating: 4,
+      text: 'Great maintenance service. Our system is running much better now. Will use again.',
+      date: '2024-09-12',
+      source: 'google' as const,
+    },
+  ],
 
   // ─── Feature Flags ──────────────────────────────────
   features: {

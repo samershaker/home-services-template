@@ -142,6 +142,8 @@ export interface SiteConfig {
   theme: Theme;
   seo: SEOConfig;
   features: Features;
+  trustStats?: TrustStat[];
+  reviews?: Review[];
 }
 
 // ─── Page Generation ──────────────────────────────────
@@ -156,6 +158,31 @@ export interface SitemapEntry {
 export interface PageParams {
   service?: string;
   location?: string;
+}
+
+// ─── Reviews ──────────────────────────────────────────
+
+export interface Review {
+  author: string;
+  rating: number;
+  text: string;
+  date: string;
+  source?: 'google' | 'yelp' | 'facebook' | 'other';
+}
+
+// ─── Trust / Stats ────────────────────────────────────
+
+export interface TrustStat {
+  value: string;
+  label: string;
+  icon?: string;
+}
+
+// ─── Content Sections ─────────────────────────────────
+
+export interface ContentSection {
+  id: string;
+  enabled: boolean;
 }
 
 // ─── Component Props ──────────────────────────────────
@@ -174,6 +201,33 @@ export interface ServiceCardProps {
 export interface HeroProps {
   title?: string;
   subtitle?: string;
+  tagline?: string;
+  backgroundImage?: string;
+  backgroundVideo?: string;
+  ctaPrimary?: { label: string; href: string };
+  ctaSecondary?: { label: string; href: string };
   showVideo?: boolean;
   showEmergency?: boolean;
+}
+
+export interface CTABannerProps {
+  title?: string;
+  subtitle?: string;
+  ctaText?: string;
+  ctaHref?: string;
+  variant?: 'gradient' | 'glass' | 'solid';
+  className?: string;
+}
+
+export interface TrustSectionProps {
+  title?: string;
+  subtitle?: string;
+  stats?: TrustStat[];
+  className?: string;
+}
+
+export interface ReviewsWidgetProps {
+  reviews?: Review[];
+  title?: string;
+  className?: string;
 }
